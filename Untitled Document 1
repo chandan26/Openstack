@@ -1,0 +1,420 @@
+[student@workstation ~]$ lab architeture-lab setup
+Error: unknown problem specified and not found, architeture-lab
+[student@workstation ~]$ lab architecture-lab setup
+
+Setting up workstation for lab exercise work:
+
+ · Verifying project: production...............................  SUCCESS
+ · Creating user env file: operator1-production-rc.............  SUCCESS
+ · Creating keypair: example-keypair...........................  FAIL
+ . Creating flavor: default....................................  SUCCESS
+ . Creating image: production-rhel7............................  FAIL
+ . Creating internal network: production-network1..............  FAIL
+ . Creating subnet: production-subnet1.........................  FAIL
+ . Creating external network: provider-datacentre..............  SUCCESS
+ . Creating router: production-router1.........................  FAIL
+ . Creating security group: default............................  FAIL
+ . Creating port rule: ssh.....................................  FAIL
+ . Creating protocol rule: icmp................................  FAIL
+
+[student@workstation ~]$ source admin-rc 
+[student@workstation ~]$ lab architecture-overcloud setup
+
+Setting up workstation for lab exercise work:
+
+ . Verifying node reachable: director..........................  SUCCESS
+ . Verifying node reachable: controller0.......................  SUCCESS
+ . Verifying node reachable: compute0..........................  SUCCESS
+ . Verifying node reachable: computehci0.......................  SUCCESS
+
+[student@workstation ~]$ ssh stack@director
+Warning: Permanently added 'director,172.25.250.200' (ECDSA) to the list of known hosts.
+(undercloud) [stack@director ~]$ env | grep OS_
+OS_BAREMETAL_API_VERSION=1.34
+OS_USER_DOMAIN_NAME=Default
+OS_PROJECT_NAME=admin
+OS_IDENTITY_API_VERSION=3
+OS_PASSWORD=redhat
+OS_AUTH_TYPE=password
+PS1=${OS_CLOUDNAME:+($OS_CLOUDNAME)} [\u@\h \W]\$ 
+OS_AUTH_URL=https://172.25.249.201:13000/
+OS_USERNAME=admin
+OS_NO_CACHE=True
+OS_CLOUDNAME=undercloud
+OS_PROJECT_DOMAIN_NAME=Default
+(undercloud) [stack@director ~]$ openstack server list -c Name -c Status -c Networks
++-------------+---------+------------------------+
+| Name        | Status  | Networks               |
++-------------+---------+------------------------+
+| compute1    | ACTIVE  | ctlplane=172.25.249.55 |
+| compute0    | ACTIVE  | ctlplane=172.25.249.54 |
+| computehci0 | ACTIVE  | ctlplane=172.25.249.59 |
+| controller0 | ACTIVE  | ctlplane=172.25.249.57 |
+| ceph0       | SHUTOFF | ctlplane=172.25.249.58 |
++-------------+---------+------------------------+
+(undercloud) [stack@director ~]$ exit
+logout
+Connection to director closed.
+[student@workstation ~]$ ssh heat-admin@controller0
+Warning: Permanently added 'controller0,172.25.250.1' (ECDSA) to the list of known hosts.
+[heat-admin@controller0 ~]$ ip addr | grep -E 'eth0|vlan|br-ex'
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    inet 172.25.249.57/24 brd 172.25.249.255 scope global eth0
+    inet 172.25.249.50/32 brd 172.25.249.255 scope global eth0
+13: br-ex: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 172.25.250.1/24 brd 172.25.250.255 scope global br-ex
+    inet 172.25.250.50/32 brd 172.25.250.255 scope global br-ex
+14: vlan20: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 172.24.2.1/24 brd 172.24.2.255 scope global vlan20
+15: vlan40: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 172.24.4.1/24 brd 172.24.4.255 scope global vlan40
+    inet 172.24.4.50/32 brd 172.24.4.255 scope global vlan40
+16: vlan10: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 172.24.1.1/24 brd 172.24.1.255 scope global vlan10
+    inet 172.24.1.51/32 brd 172.24.1.255 scope global vlan10
+    inet 172.24.1.50/32 brd 172.24.1.255 scope global vlan10
+17: vlan30: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 172.24.3.1/24 brd 172.24.3.255 scope global vlan30
+    inet 172.24.3.50/32 brd 172.24.3.255 scope global vlan30
+18: vlan50: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 172.24.5.1/24 brd 172.24.5.255 scope global vlan50
+[heat-admin@controller0 ~]$ sudo ovs-vsctl list-br
+br-eth3
+br-eth4
+br-ex
+br-int
+br-trunk
+[heat-admin@controller0 ~]$ sudo ovs-vsctl list-ifaces br-trunk
+eth1
+vlan10
+vlan20
+vlan30
+vlan40
+vlan50
+[heat-admin@controller0 ~]$ sudo ovs-vsctl list-ifaces br-ex
+eth2
+[heat-admin@controller0 ~]$ sudo docker ps --format="table {{.Names}}\t{{.Status}}"
+NAMES                              STATUS
+ovn-dbs-bundle-docker-0            Up 2 hours
+openstack-manila-share-docker-0    Up 2 hours
+openstack-cinder-volume-docker-0   Up 2 hours
+haproxy-bundle-docker-0            Up 2 hours
+redis-bundle-docker-0              Up 2 hours
+galera-bundle-docker-0             Up 2 hours
+rabbitmq-bundle-docker-0           Up 2 hours
+ceph-mgr-controller0               Up 2 hours
+ceph-mon-controller0               Up 2 hours
+ceph-mds-controller0               Up 2 hours
+gnocchi_statsd                     Up 2 hours
+gnocchi_api                        Up 2 hours
+gnocchi_metricd                    Up 2 hours
+octavia_health_manager             Up 2 hours (healthy)
+panko_api                          Up 2 hours (healthy)
+octavia_api                        Up 2 hours
+nova_metadata                      Up 2 hours
+nova_api                           Up 2 hours (healthy)
+octavia_housekeeping               Up 2 hours (healthy)
+glance_api                         Up 2 hours (healthy)
+swift_proxy                        Up 2 hours (healthy)
+octavia_worker                     Up 2 hours (healthy)
+ovn_controller                     Up 2 hours
+heat_api_cfn                       Up 2 hours (healthy)
+neutron_api                        Up 2 hours (healthy)
+aodh_listener                      Up 2 hours (healthy)
+swift_container_auditor            Up 2 hours
+heat_api_cron                      Up 2 hours
+swift_object_expirer               Up 2 hours
+swift_object_updater               Up 2 hours
+swift_container_replicator         Up 2 hours
+swift_account_auditor              Up 2 hours
+manila_api                         Up 2 hours
+cinder_api_cron                    Up 2 hours
+logrotate_crond                    Up 2 hours
+swift_account_server               Up 2 hours (healthy)
+nova_scheduler                     Up 2 hours (healthy)
+cinder_scheduler                   Up 2 hours (healthy)
+swift_object_replicator            Up 2 hours
+swift_container_server             Up 2 hours (healthy)
+heat_engine                        Up 2 hours (healthy)
+aodh_api                           Up 2 hours
+swift_rsync                        Restarting (11) About an hour ago
+nova_vnc_proxy                     Up 2 hours (healthy)
+ceilometer_agent_notification      Up 2 hours (healthy)
+manila_scheduler                   Up 2 hours (healthy)
+swift_account_reaper               Up 2 hours
+nova_consoleauth                   Up 2 hours (healthy)
+nova_api_cron                      Up 2 hours
+aodh_notifier                      Up 2 hours (healthy)
+ceilometer_agent_central           Up 2 hours (healthy)
+swift_account_replicator           Up 2 hours
+swift_object_auditor               Up 2 hours
+heat_api                           Up 2 hours (healthy)
+cinder_api                         Up 2 hours
+swift_object_server                Up 2 hours (healthy)
+nova_conductor                     Up 2 hours (healthy)
+aodh_evaluator                     Up 2 hours (healthy)
+swift_container_updater            Up 2 hours
+keystone_cron                      Up 2 hours
+keystone                           Up 2 hours (healthy)
+iscsid                             Up 2 hours
+nova_placement                     Up 2 hours
+horizon                            Up 2 hours
+clustercheck                       Up 2 hours
+memcached                          Up 2 hours
+[heat-admin@controller0 ~]$ exit
+logout
+Connection to controller0 closed.
+[student@workstation ~]$ ssh heat-admin@compute0
+Warning: Permanently added 'compute0,172.25.250.2' (ECDSA) to the list of known hosts.
+[heat-admin@compute0 ~]$ ip addr | grep -E 'eth0|vlan|eth2'
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    inet 172.25.249.54/24 brd 172.25.249.255 scope global eth0
+4: eth2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast master ovs-system state UP group default qlen 1000
+14: vlan10: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 172.24.1.2/24 brd 172.24.1.255 scope global vlan10
+15: vlan20: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 172.24.2.2/24 brd 172.24.2.255 scope global vlan20
+16: vlan30: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 172.24.3.2/24 brd 172.24.3.255 scope global vlan30
+17: vlan50: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 172.24.5.2/24 brd 172.24.5.255 scope global vlan50
+[heat-admin@compute0 ~]$ ip addr | grep -E 'eth0|vlan|eth2'
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    inet 172.25.249.54/24 brd 172.25.249.255 scope global eth0
+4: eth2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast master ovs-system state UP group default qlen 1000
+14: vlan10: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 172.24.1.2/24 brd 172.24.1.255 scope global vlan10
+15: vlan20: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 172.24.2.2/24 brd 172.24.2.255 scope global vlan20
+16: vlan30: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 172.24.3.2/24 brd 172.24.3.255 scope global vlan30
+17: vlan50: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 172.24.5.2/24 brd 172.24.5.255 scope global vlan50
+[heat-admin@compute0 ~]$ sudo docker ps --format="table {{.Names}}\t{{.Status}}"
+NAMES                      STATUS
+ovn_controller             Up 2 hours
+ovn_metadata_agent         Up 2 hours (healthy)
+logrotate_crond            Up 2 hours
+nova_compute               Up 2 hours (healthy)
+nova_migration_target      Up 2 hours
+ceilometer_agent_compute   Up 2 hours
+iscsid                     Up 2 hours
+nova_libvirt               Up 2 hours
+nova_virtlogd              Up 2 hours
+[heat-admin@compute0 ~]$ exit
+logout
+Connection to compute0 closed.
+[student@workstation ~]$ ssh heat-admin@computehci0
+Warning: Permanently added 'computehci0,172.25.250.6' (ECDSA) to the list of known hosts.
+[heat-admin@computehci0 ~]$ sudo ovs-vsctl list-br
+br-eth3
+br-eth4
+br-ex
+br-int
+br-trunk
+[heat-admin@computehci0 ~]$ sudo ovs-vsctl list-ifaces
+ovs-vsctl: 'list-ifaces' command requires at least 1 arguments
+[heat-admin@computehci0 ~]$ sudo ovs-vsctl list-ifaces br-trunk
+eth1
+vlan10
+vlan20
+vlan30
+vlan40
+vlan50
+[heat-admin@computehci0 ~]$ lsblk -fs
+NAME  FSTYPE  LABEL      UUID                                 MOUNTPOINT
+sr0   iso9660 config-2   2020-10-18-13-02-31-00               
+vda1  iso9660 config-2   2018-10-23-14-05-37-00               
+└─vda                                                         
+vda2  xfs     img-rootfs afa067cb-d91f-432e-b7c4-c546dabe10ec /
+└─vda                                                         
+vdb1  xfs                ffcdbb59-ec97-4c25-8b44-f2afbd24faed 
+└─vdb                                                         
+vdb2                                                          
+└─vdb                                                         
+vdc1  xfs                2086f3e4-3649-46be-947e-a04a0da123f7 
+└─vdc                                                         
+vdc2                                                          
+└─vdc                                                         
+vdd1  xfs                ad344158-f567-4e22-aff2-f7f714391eb5 
+└─vdd                                                         
+vdd2                                                          
+└─vdd                                                         
+[heat-admin@computehci0 ~]$ exit
+logout
+Connection to computehci0 closed.
+[student@workstation ~]$ ssh heat-admin@ceph0
+Warning: Permanently added 'ceph0,172.25.250.3' (ECDSA) to the list of known hosts.
+[heat-admin@ceph0 ~]$ ip addr | grep -E 'eth0|vlan|eth2'
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    inet 172.25.249.58/24 brd 172.25.249.255 scope global eth0
+4: eth2: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast master ovs-system state UP group default qlen 1000
+8: vlan30: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 172.24.3.3/24 brd 172.24.3.255 scope global vlan30
+9: vlan40: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 172.24.4.3/24 brd 172.24.4.255 scope global vlan40
+10: vlan50: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UNKNOWN group default qlen 1000
+    inet 172.24.5.3/24 brd 172.24.5.255 scope global vlan50
+[heat-admin@ceph0 ~]$ exit
+logout
+Connection to ceph0 closed.
+[student@workstation ~]$ ssh heat-admin@controller0
+Last login: Sun Oct 18 15:57:12 2020 from 172.25.250.254
+[heat-admin@controller0 ~]$ ceph status
+  cluster:
+    id:     fe8e3db0-d6c3-11e8-a76d-52540001fac8
+    health: HEALTH_OK
+ 
+  services:
+    mon: 1 daemons, quorum controller0
+    mgr: controller0(active)
+    mds: cephfs-1/1/1 up  {0=controller0=up:active}
+    osd: 6 osds: 6 up, 6 in
+ 
+  data:
+    pools:   7 pools, 416 pgs
+    objects: 748 objects, 5655 MB
+    usage:   6308 MB used, 107 GB / 113 GB avail
+    pgs:     416 active+clean
+ 
+[heat-admin@controller0 ~]$ ceph osd lspools
+1 images,2 metrics,3 backups,4 vms,5 volumes,6 manila_data,7 manila_metadata,
+[heat-admin@controller0 ~]$ ceph osd ls
+0
+1
+2
+3
+4
+5
+[heat-admin@controller0 ~]$ exit
+logout
+Connection to controller0 closed.
+[student@workstation ~]$ history
+    1  lab architeture-lab setup
+    2  lab architecture-lab setup
+    3  source admin-rc 
+    4  lab architecture-overcloud setup
+    5  ssh stack@director
+    6  ssh heat-admin@controller0
+    7  ssh heat-admin@compute0
+    8  ssh heat-admin@computehci0
+    9  ssh heat-admin@ceph0
+   10  ssh heat-admin@controller0
+   11  history
+[student@workstation ~]$ !4
+lab architecture-overcloud setup
+
+Setting up workstation for lab exercise work:
+
+ . Verifying node reachable: director..........................  SUCCESS
+ . Verifying node reachable: controller0.......................  SUCCESS
+ . Verifying node reachable: compute0..........................  SUCCESS
+ . Verifying node reachable: computehci0.......................  SUCCESS
+
+[student@workstation ~]$ history
+    1  lab architeture-lab setup
+    2  lab architecture-lab setup
+    3  source admin-rc 
+    4  lab architecture-overcloud setup
+    5  ssh stack@director
+    6  ssh heat-admin@controller0
+    7  ssh heat-admin@compute0
+    8  ssh heat-admin@computehci0
+    9  ssh heat-admin@ceph0
+   10  ssh heat-admin@controller0
+   11  history
+   12  lab architecture-overcloud setup
+   13  history
+[student@workstation ~]$ !5
+ssh stack@director
+(undercloud) [stack@director ~]$ ls
+hieradata.txt            local_registry_images.yaml     stackrc                      undercloud.conf
+images                   overcloud_container_list.yaml  tempest-deployer-input.conf  undercloud-passwords.conf
+instackenv-initial.json  overcloudrc                    templates
+(undercloud) [stack@director ~]$ source overcloudrc 
+(overcloud) [stack@director ~]$ openstack role list -c Name
++-----------------+
+| Name            |
++-----------------+
+| swiftoperator   |
+| heat_stack_user |
+| ResellerAdmin   |
+| admin           |
+| _member_        |
++-----------------+
+(overcloud) [stack@director ~]$ exit
+logout
+Connection to director closed.
+[student@workstation ~]$ lab architecture-overcloud cleanup
+
+Cleaning up the exercise on workstation.
+
+ . Cleaning up.................................................  SUCCESS
+
+[student@workstation ~]$ lab architecture-lab setup
+
+Setting up workstation for lab exercise work:
+
+ · Verifying project: production...............................  SUCCESS
+ · Creating user env file: operator1-production-rc.............  SUCCESS
+ · Creating keypair: example-keypair...........................  FAIL
+ . Creating flavor: default....................................  SUCCESS
+ . Creating image: production-rhel7............................  FAIL
+ . Creating internal network: production-network1..............  FAIL
+ . Creating subnet: production-subnet1.........................  FAIL
+ . Creating external network: provider-datacentre..............  SUCCESS
+ . Creating router: production-router1.........................  FAIL
+ . Creating security group: default............................  FAIL
+ . Creating port rule: ssh.....................................  FAIL
+ . Creating protocol rule: icmp................................  FAIL
+
+[student@workstation ~]$ source admin-rc 
+[student@workstation ~]$ lab architecture-lab setup
+
+Setting up workstation for lab exercise work:
+
+ · Verifying project: production...............................  SUCCESS
+ · Creating user env file: operator1-production-rc.............  SUCCESS
+ · Creating keypair: example-keypair...........................  FAIL
+ . Creating flavor: default....................................  SUCCESS
+ . Creating image: production-rhel7............................  FAIL
+ . Creating internal network: production-network1..............  FAIL
+ . Creating subnet: production-subnet1.........................  FAIL
+ . Creating external network: provider-datacentre..............  SUCCESS
+ . Creating router: production-router1.........................  FAIL
+ . Creating security group: default............................  FAIL
+ . Creating port rule: ssh.....................................  FAIL
+ . Creating protocol rule: icmp................................  FAIL
+
+[student@workstation ~]$ openstack flavor list
++--------------------------------------+--------------------+------+------+-----------+-------+-----------+
+| ID                                   | Name               |  RAM | Disk | Ephemeral | VCPUs | Is Public |
++--------------------------------------+--------------------+------+------+-----------+-------+-----------+
+| 7bcd1bb3-91f0-40d0-84b2-f225fed12bb6 | default-extra-disk | 2048 |   10 |         5 |     2 | True      |
+| e04380ed-b027-4a72-a697-4307bc014b6c | default            | 2048 |   10 |         0 |     2 | True      |
+| f341b71b-daea-4f47-aac7-a251a3f2cd42 | default-swap       | 2048 |   10 |         0 |     2 | True      |
++--------------------------------------+--------------------+------+------+-----------+-------+-----------+
+[student@workstation ~]$ openstack keypair list
+
+[student@workstation ~]$ openstack image list
++--------------------------------------+-----------------+--------+
+| ID                                   | Name            | Status |
++--------------------------------------+-----------------+--------+
+| ec9473de-4048-4ebb-b08a-a9be619477ac | octavia-amphora | active |
+| 6b0128a9-4481-4ceb-b34e-ffe92e0dcfdd | rhel7           | active |
+| 5f7f8208-33b5-4f17-8297-588f938182c0 | rhel7-db        | active |
+| 14b7e8b2-7c6d-4bcf-b159-1e4e7582107c | rhel7-web       | active |
++--------------------------------------+-----------------+--------+
+[student@workstation ~]$ openstack security group list
++--------------------------------------+-----------------------+------------------------+----------------------------------+
+| ID                                   | Name                  | Description            | Project                          |
++--------------------------------------+-----------------------+------------------------+----------------------------------+
+| 85fff9b4-1a79-4c77-bf5a-c95c4e1478c4 | default               | Default security group | 294ad7735e6646d7bb908e32de8582c3 |
+| 91fe7665-eb3a-4755-9c36-1741732b304a | default               | Default security group | d8f51de41e7e4f4b8c71ed7dfc226c97 |
+| 952467e9-b667-44ba-adb6-878c2e089308 | default               | Default security group | 3c003f65d8d64914a053f178fbbf953c |
+| d3e14caa-e326-4ae0-80aa-14a2ea25767f | lb-health-mgr-sec-grp | lb-health-mgr-sec-grp  | d8f51de41e7e4f4b8c71ed7dfc226c97 |
+| e08d4ea1-8245-4dbb-a959-4883936006c2 | default               | Default security group | 42eecbfbaf684f909abfe5304434fc77 |
+| e6bff0f3-a37f-487d-8057-8fd7adb074e8 | lb-mgmt-sec-grp       | lb-mgmt-sec-grp        | d8f51de41e7e4f4b8c71ed7dfc226c97 |
++--------------------------------------+-----------------------+------------------------+----------------------------------+
+[student@workstation ~]$ 
+

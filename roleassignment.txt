@@ -1,0 +1,283 @@
+    6  git pull https://github.com/chandan26/openstack
+    7  git branch osroleassignment
+    8  git add Firstclass1 
+    9  git checkout -b osroleassignment
+   10  git checkout osroleassignment
+   11  git add Firstclass1 
+   12  git commit -m "Role assignment"
+   13  git push UNDERCLOUD_GLANCE_PASSWORD=$(sudo hiera glance::api::keystone_password)
+  237  git status
+  238  git add Firstclass1 
+  239  git commit -m "Rolesassigning"
+  240  git remote add origin https://github.com/chandan26/openstack
+  242  history | grep git
+[root@workstation Desktop]# git push -u origin osroleassignment
+Username for 'https://github.com': chandan26
+Password for 'https://chandan26@github.com': 
+Counting objects: 4, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 3.32 KiB | 0 bytes/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+remote: This repository moved. Please use the new location:
+remote:   https://github.com/chandan26/Openstack.git
+remote: 
+remote: Create a pull request for 'osroleassignment' on GitHub by visiting:
+remote:      https://github.com/chandan26/Openstack/pull/new/osroleassignment
+remote: 
+To https://github.com/chandan26/openstack
+ * [new branch]      osroleassignment -> osroleassignment
+Branch osroleassignment set up to track remote branch osroleassignment from origin.
+[root@workstation Desktop]# 
+[root@workstation Desktop]# 
+[root@workstation Desktop]# 
+[root@workstation Desktop]# clear
+
+[root@workstation Desktop]# history
+    1  cd Desktop/
+    2  yum install github
+    3  yum install git.x86_64 
+    4  git init 
+    5  git pull 
+    6  git pull https://github.com/chandan26/openstack
+    7  git branch osroleassignment
+    8  git add Firstclass1 
+    9  git checkout -b osroleassignment
+   10  git checkout osroleassignment
+   11  git add Firstclass1 
+   12  git commit -m "Role assignment"
+   13  git push UNDERCLOUD_GLANCE_PASSWORD=$(sudo hiera glance::api::keystone_password)
+   14  UNDERCLOUD_HAPROXY_STATS_PASSWORD=$(sudo hiera tripleo::haproxy::haproxy_stats_password)
+   15  UNDERCLOUD_HEAT_ENCRYPTION_KEY=$(sudo hiera heat::engine::auth_encryption_key)
+   16  UNDERCLOUD_HEAT_PASSWORD=$(sudo hiera heat::keystone_password)
+   17  UNDERCLOUD_HEAT_STACK_DOMAIN_ADMIN_PASSWORD=$(sudo hiera heat_stack_domain_admin_password)
+   18  UNDERCLOUD_HORIZON_SECRET_KEY=$(sudo hiera horizon_secret_key)
+   19  UNDERCLOUD_IRONIC_PASSWORD=$(sudo hiera ironic::api::authtoken::password)
+   20  UNDERCLOUD_NEUTRON_PASSWORD=$(sudo hiera neutron::server::auth_password)
+   21  UNDERCLOUD_NOVA_PASSWORD=$(sudo hiera nova::keystone::authtoken::password)
+   22  UNDERCLOUD_RABBIT_COOKIE=$(sudo hiera rabbit_cookie)
+   23  UNDERCLOUD_RABBIT_PASSWORD=$(sudo hiera rabbit_password)
+   24  UNDERCLOUD_RABBIT_USERNAME=$(sudo hiera rabbit_username)
+   25  UNDERCLOUD_SWIFT_HASH_SUFFIX=$(sudo hiera swift::swift_hash_suffix)
+   26  UNDERCLOUD_SWIFT_PASSWORD=$(sudo hiera swift::proxy::authtoken::admin_password)
+   27  UNDERCLOUD_MISTRAL_PASSWORD=$(sudo hiera mistral::admin_password)
+   28  UNDERCLOUD_ZAQAR_PASSWORD=$(sudo hiera zaqar::keystone::authtoken::password)
+   29  UNDERCLOUD_CINDER_PASSWORD=$(sudo hiera cinder::keystone::authtoken::password)
+   30  [root@director ~]# exit
+   31  logout
+   32  Connection to director closed.
+   33  [student@workstation ~]$ clear
+   34  [student@workstation ~]$ openstack project list
+   35  Missing value auth-url required for auth plugin password
+   36  [student@workstation ~]$ source admin-rc 
+   37  [student@workstation ~]$ openstack project list
+   38  +----------------------------------+------------+
+   39  | ID                               | Name       |
+   40  +----------------------------------+------------+
+   41  | 294ad7735e6646d7bb908e32de8582c3 | production |
+   42  | 3c003f65d8d64914a053f178fbbf953c | finance    |
+   43  | 42eecbfbaf684f909abfe5304434fc77 | admin      |
+   44  | d8f51de41e7e4f4b8c71ed7dfc226c97 | service    |
+   45  +----------------------------------+------------+
+   46  [student@workstation ~]$ openstack project create --description  "Demo project" cpdemo
+   47  +-------------+----------------------------------+
+   48  | Field       | Value                            |
+   49  +-------------+----------------------------------+
+   50  | description | Demo project                     |
+   51  | domain_id   | default                          |
+   52  | enabled     | True                             |
+   53  | id          | ba5a01936ff64b60adb0170683d87a7d |
+   54  | is_domain   | False                            |
+   55  | name        | cpdemo                           |
+   56  | parent_id   | default                          |
+   57  | tags        | []                               |
+   58  +-------------+----------------------------------+
+   59  [student@workstation ~]$ openstack project list
+   60  +----------------------------------+------------+
+   61  | ID                               | Name       |
+   62  +----------------------------------+------------+
+   63  | 294ad7735e6646d7bb908e32de8582c3 | production |
+   64  | 3c003f65d8d64914a053f178fbbf953c | finance    |
+   65  | 42eecbfbaf684f909abfe5304434fc77 | admin      |
+   66  | ba5a01936ff64b60adb0170683d87a7d | cpdemo     |
+   67  | d8f51de41e7e4f4b8c71ed7dfc226c97 | service    |
+   68  +----------------------------------+------------+
+   69  [student@workstation ~]$ openstack user create --password redhat  operator@example.com --project cpdemo operator
+   70  usage: openstack user create [-h] [-f {json,shell,table,value,yaml}]
+   71                               [-c COLUMN] [--max-width <integer>] [--fit-width]
+   72                               [--print-empty] [--noindent] [--prefix PREFIX]
+   73                               [--domain <domain>] [--project <project>]
+   74                               [--project-domain <project-domain>]
+   75                               [--password <password>] [--password-prompt]
+   76                               [--email <email-address>]
+   77                               [--description <description>]
+   78                               [--enable | --disable] [--or-show]
+   79                               <name>
+   80  openstack user create: error: unrecognized arguments: operator
+   81  [student@workstation ~]$ openstack user create --password redhat  --email operator@example.com --project cpdemo operator
+   82  +---------------------+----------------------------------+
+   83  | Field               | Value                            |
+   84  +--
+   85  | default_project_id  | ba5a01936ff64b60adb0170683d87a7d |
+   86  | domain_id           | defau
+   87  | email               | operator@example.com             |
+   88  | enabled          
+   89  | id                  | dd9a8c78bd764d8b9e86d048a05a1f09 |
+   90  | n
+   91  | options             | {}                               |
+   92  | password_expires_at | None   
+   93  +---------------------+----------------------------------+
+   94  [st
+   95  +---------------------+----------------------------------+
+   96  | Field       
+   97  +---------------------+----------------------------------+
+   98  | default_pro
+   99  | domain_id           | default                          |
+  100  | email        
+  101  | enabled             | True                        
+  102  | id                  | 27c47bcb0a3d4049bdb43d79822ff746
+  103  | name                | architect                       
+  104  | options             | {}                               |
+  105  | passwo
+  106  +---------------------+----------------------------------+
+  107  [student@workstation
+  108  +----------------------------------+------------+
+  109  | ID           
+  110  +----------------------------------+------------+
+  111  | 27c47bcb0a3d4049bdb43d79
+  112  | 68242415700d42dbb52bbd4ff13f3d58 | swift      |
+  113  | 6f0d421b5f2a4d0880b86b713a
+  114  | 7177e7df20fc41b3b0b65
+  115  | 794e9961bb1a492096d1e115288e02de | 
+  116  | 9ab28630cf93470a9a38047c6132
+  117  | 9b523cf167aa4c129163a424d127ebe3 | heat-cfn   
+  118  | 9ce00d8980274974b2285ed73ef80241 | admin      |
+  119  | 9d70
+  120  | a48dc9ff61c54efb8104440971e1ffdd | plac
+  121  | ad36a17bc5b144e0aa66ec69fa4ec790 | glance    
+  122  | b67fd5852ed54979abf8b08cc884d706 | neutron    |
+  123  | d5ea361ac1d44b3fa6aa289cd0a52756 | nova       |
+  124  | d82e9ee56dd84fef8b6957e9af7eba35 | octavia    |
+  125  | dd9a8c78bd764d8b9e86d048a05a1f09 | operator   |
+  126  | e0e71c96c5a342268a433c7e4ff0eebc | manilav2   |
+  127  | f11e62fac8194214a16504258016f77b | heat       |
+  128  | ff141d04fc214efea2bf7796c15d8fc8 | panko      |
+  129  +----------------------------------+------------+
+  130  [student@workstation ~]$ openstack role assignment list
+  131  +----------------------------
+  132  | Role                             | User         
+  133  +----------------------------------+----------------------------------+------------------------------
+  134  | 9fc98f8d769c4ad08a7ffeae83a19029 | 68242415700d42dbb52bbd4ff13f3d58 |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+  135  | 9fc98f8d769c4ad08a7ffeae83a19029 | 6f0d421b5f2a4d0880b86b713a87c3ba |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+  136  | 9fc98f8d769c4a
+  137  | 6fd3ce42a3b645d19e406571b1c0df46 | 794e9961bb
+  138  | 9fc98f8d769c4ad08a7ffeae83a19029 | 794e9961bb1a
+  139  | 9fc98f8d769c4ad08a7ffeae83a19029 | 9ab28630cf93470a9a38047c6132a21c |                            
+  140  | 9fc98f8d769c4ad08a7ffeae83a19029 | 9b523cf167aa4c129163a424d127ebe3 |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+  141  | 9fe2ff9ee4384b1894a90878d3e92bab | 9ce00d8980274974b2285ed73ef80241 |       
+  142  | 9fe2ff9ee4384b1894a90878d3e92bab | 9ce00d8980274974b2285ed73ef80241 |                                         
+  143  | 9fc98f8d769c4ad08a7ffeae83a19029 | 9ce00d8980274974b2285ed73ef8024
+  144  | 9fc98f8d769c4ad08a7ffeae83a19029 | 9d704f55d7d3447c8e8229b706d5e5ca |       
+  145  | 9fc98f8d769c4ad08a7ffeae83a19029 | a48dc9ff61c54efb8104440971e1ffdd |    
+  146  | 9fc98f8d769c4ad08a7ffeae83a19029 | ad36a17bc5b144e0aa66ec69fa4ec790 
+  147  | 9fc98f8d769c4ad08a7ffeae83a19029 | b67fd5852ed54979abf8b08cc88
+  148  | 9fc98f8d769c4ad08a7ffeae83a19029 | d5ea361ac1d44b3fa6aa289cd0a52756 | 
+  149  | 9fc98f8d769c4ad08a7ffeae83a19029 | d82e9ee56dd84fef8
+  150  | 9fc98f8d769c4ad08a7ffeae83a19029 | e0e71c96c5a342268a433
+  151  | 9fc98f8d769c4ad08a7ffeae83a19029 | f11e62fac8194214a165042580
+  152  | 9fc98f8d769c4ad08a7ffeae83a19029 | ff141d04fc214efea2bf7796c15d8fc8 |                           
+  153  | 9fc98f8d769c4ad08a7ffeae83a19029 |                                  | 2cfc323f68980c5bc3a5ab382d504d4b112dac2677fd1d0d
+  154  | 9fc98f8d769c4ad08a7ffeae83a19029 |                      
+  155  | 9fe2ff9ee4384b1894a90878d3e92bab |                          
+  156  | 0aa9cdf501324d88b5a58c7773dec328 |                                  | a5296a0f5fba2304e3017e7ad96d730bda72e4a518e485e4a61dafccfe7528c0 | 294ad7735e6646d7bb908e32de8582c3 |                                  | False     |
+  157  | 9fe2ff9ee4384b1894a90878d3e92bab |                                  | db4d2aa26bf05671c73bf9d41c388987b93300edd257fac9a7f373f5b7d10997 | 3c003f65d8d64914a053
+  158  | 0
+  159  | 9fc98f8d769c4ad08a7ffeae83a19029 | 383d0a108c424c4385f84
+  160  | 9fc98f8d769c4ad08a7ffeae83a19029 | 9ce00d8980274974b2285ed73ef80241 |  
+  161  | 9fc98f8d769c4ad08a7ffeae83a19029 | 9ce00d8980274974b2285ed73ef80241 |                                                                  |                                  |                                  | False     |
+  162  +----------------------------------+----------------------------------+------------------------------------------------------------------+-----------------------
+  163  [student@workstation
+  164  [student@workstation ~]$ openstack role  list
+  165  +--
+  166  | ID                               | Name            |
+  167  +---------
+  168  | 0aa9cdf501324d88b5a58c7773dec328 | swiftoperator   |
+  169  | 68625e59d10e42c5a91c7e84eea8490a | heat_stack_user |
+  170  | 6fd3ce42a3b645d19e406571b1c0df46 | ResellerAdmin   |
+  171  | 9fc98f8d769c4ad08a7ffeae83a19029 | admin           |
+  172  | 9fe2ff9ee4384b1894a90878d3e92bab | _member_        |
+  173  +----------------------------------+-----------------+
+  174  [student@workstation ~]$ openstack role assignment list --project 
+  175  usage: openstack role assignment list [-h] [-f {csv,json,table,value,yaml}]
+  176                                        [-c COLUMN] [--max-width <integer>]
+  177                                        [--fit-width] [--print-empty]
+  178                                        [--noindent]
+  179                                        [--quote {all,minimal,none,nonnumeric}]
+  180                                        [--sort-colu
+  181                                        [--effective] [--
+  182                                
+  183                                        [--user <user>]
+  184                                        [--user-domain <user-domain>]
+  185                                
+  186                                        [--group-domain <group-domain>]
+  187                                        [--domain <domain> | --project <project>]
+  188                                        [--project-domain <project-domain>]
+  189                                        [--inherited] [--auth-user]
+  190                                        [--auth-project]
+  191  openstack role assignment list: error: argument --project: expected one argument
+  192  [student@workstation ~]$ openstack role assignment list --project cpdemo
+  193  [student@workstation ~]$ openstack role add user operator  --project cpdemo _member_ 
+  194  usage: openstack role add [-h] [--domain <domain> | --project <project>]
+  195                            [--user <user> | --group <group>]
+  196                            [--group-domain <group-domain>]
+  197                            [--project-domain <project-domain>]
+  198                            [--user-domain <user-domain>] [--inherited]
+  199                            [--role-domain <role-domain>]
+  200                            <role>
+  201  openstack role add: error: unrecognized arguments: operator _member_
+  202  [student@workstation ~]$ openstack role add --user operator  --project cpdemo _member_ 
+  203  [student@workstation ~]$ openstack role assignment list --project cpdemo+----------------------------------+----------------------------------+-------+----------------------------------+--------+-----------+
+  204  | Role                             | User                             | Group | Project                          | Domain | Inherited |
+  205  +----------------------------------+----------------------------------+-------+----------------------------------+--------+-----------+
+  206  | 9fe2ff9ee4384b1894a90878d3e92bab | dd9a8c78bd764d8b9e86d048a05a1f09 |       | ba5a01936ff64b60adb0170683d87a7d |        | False     |
+  207  +----------------------------------+----------------------------------+-------+----------------------------------+--------+-----------+
+  208  [student@workstation ~]$ openstack role assignment list --project cpdemo --user operator
+  209  +----------------------------------+----------------------------------+-------+----------------------------------+--------+-----------+
+  210  | Role                             | User                             | Group | Project                          | Domain | Inherited |
+  211  +----------------------------------+----------------------------------+-------+----------------------------------+--------+-----------+
+  212  | 9fe2ff9ee4384b1894a90878d3e92bab | dd9a8c78bd764d8b9e86d048a05a1f09 |       | ba5a01936ff64b60adb0170683d87a7d |        | False     |
+  213  +----------------------------------+----------------------------------+-------+----------------------------------+--------+-----------+
+  214  [student@workstation ~]$ openstack role assignment list --project cpdemo --user operator --names
+  215  +----------+------------------+-------+----------------+--------+-----------+
+  216  | Role     | User             | Group | Project        | Domain | Inheri
+  217  +----------+--------
+  218  | _member_ | operator@Default |       | cpdem
+  219  +--
+  220  [student@workstation ~]$ openstack role add --user architect  --p
+  221  No role with a name or ID of 'admin_' exists.
+  222  [student@workstation ~]$ openstack role add --user architect  --project cpdemo admin
+  223  [student@workstation ~]$ openstack role assignment list --project cpdemo --user operator --names
+  224  +----------+------------------+-------+----------------+--------+-----------+
+  225  | Role     | User      
+  226  +----------+------------------+-------+----------------+--------+-
+  227  | _member_ | operator@Default |       | cpdemo@Default |        | False    
+  228  +----------+------------------+-------+----------------+--------+--------
+  229  [student@workstation ~]$ openstack role assignment list --project c
+  230  +----------+-------------------+-------+----------
+  231  | Role     | User              | Group | Project        | Domain | Inherited 
+  232  +----------+-------------------+-------+----------
+  233  | admin    | architect@Default |       | cpdemo@Default
+  234  | _member_ | operator@Default  |       | cpdemo@Default |        | False     |
+  235  +----
+  236  [student@workstation ~]$ 
+  237  git status
+  238  git add Firstclass1 
+  239  git commit -m "Rolesassigning"
+  240  git remote add origin https://github.com/chandan26/openstack
+  241  history
+  242  history | grep git
+  243  git push -u origin osroleassignment
+  244  clear
+  245  history
+[root@workstation Desktop]# 
+

@@ -1,0 +1,228 @@
+UNDERCLOUD_GLANCE_PASSWORD=$(sudo hiera glance::api::keystone_password)
+UNDERCLOUD_HAPROXY_STATS_PASSWORD=$(sudo hiera tripleo::haproxy::haproxy_stats_password)
+UNDERCLOUD_HEAT_ENCRYPTION_KEY=$(sudo hiera heat::engine::auth_encryption_key)
+UNDERCLOUD_HEAT_PASSWORD=$(sudo hiera heat::keystone_password)
+UNDERCLOUD_HEAT_STACK_DOMAIN_ADMIN_PASSWORD=$(sudo hiera heat_stack_domain_admin_password)
+UNDERCLOUD_HORIZON_SECRET_KEY=$(sudo hiera horizon_secret_key)
+UNDERCLOUD_IRONIC_PASSWORD=$(sudo hiera ironic::api::authtoken::password)
+UNDERCLOUD_NEUTRON_PASSWORD=$(sudo hiera neutron::server::auth_password)
+UNDERCLOUD_NOVA_PASSWORD=$(sudo hiera nova::keystone::authtoken::password)
+UNDERCLOUD_RABBIT_COOKIE=$(sudo hiera rabbit_cookie)
+UNDERCLOUD_RABBIT_PASSWORD=$(sudo hiera rabbit_password)
+UNDERCLOUD_RABBIT_USERNAME=$(sudo hiera rabbit_username)
+UNDERCLOUD_SWIFT_HASH_SUFFIX=$(sudo hiera swift::swift_hash_suffix)
+UNDERCLOUD_SWIFT_PASSWORD=$(sudo hiera swift::proxy::authtoken::admin_password)
+UNDERCLOUD_MISTRAL_PASSWORD=$(sudo hiera mistral::admin_password)
+UNDERCLOUD_ZAQAR_PASSWORD=$(sudo hiera zaqar::keystone::authtoken::password)
+UNDERCLOUD_CINDER_PASSWORD=$(sudo hiera cinder::keystone::authtoken::password)
+[root@director ~]# exit
+logout
+Connection to director closed.
+[student@workstation ~]$ clear
+
+[student@workstation ~]$ openstack project list
+Missing value auth-url required for auth plugin password
+[student@workstation ~]$ source admin-rc 
+[student@workstation ~]$ openstack project list
++----------------------------------+------------+
+| ID                               | Name       |
++----------------------------------+------------+
+| 294ad7735e6646d7bb908e32de8582c3 | production |
+| 3c003f65d8d64914a053f178fbbf953c | finance    |
+| 42eecbfbaf684f909abfe5304434fc77 | admin      |
+| d8f51de41e7e4f4b8c71ed7dfc226c97 | service    |
++----------------------------------+------------+
+[student@workstation ~]$ openstack project create --description  "Demo project" cpdemo
++-------------+----------------------------------+
+| Field       | Value                            |
++-------------+----------------------------------+
+| description | Demo project                     |
+| domain_id   | default                          |
+| enabled     | True                             |
+| id          | ba5a01936ff64b60adb0170683d87a7d |
+| is_domain   | False                            |
+| name        | cpdemo                           |
+| parent_id   | default                          |
+| tags        | []                               |
++-------------+----------------------------------+
+[student@workstation ~]$ openstack project list
++----------------------------------+------------+
+| ID                               | Name       |
++----------------------------------+------------+
+| 294ad7735e6646d7bb908e32de8582c3 | production |
+| 3c003f65d8d64914a053f178fbbf953c | finance    |
+| 42eecbfbaf684f909abfe5304434fc77 | admin      |
+| ba5a01936ff64b60adb0170683d87a7d | cpdemo     |
+| d8f51de41e7e4f4b8c71ed7dfc226c97 | service    |
++----------------------------------+------------+
+[student@workstation ~]$ openstack user create --password redhat  operator@example.com --project cpdemo operator
+usage: openstack user create [-h] [-f {json,shell,table,value,yaml}]
+                             [-c COLUMN] [--max-width <integer>] [--fit-width]
+                             [--print-empty] [--noindent] [--prefix PREFIX]
+                             [--domain <domain>] [--project <project>]
+                             [--project-domain <project-domain>]
+                             [--password <password>] [--password-prompt]
+                             [--email <email-address>]
+                             [--description <description>]
+                             [--enable | --disable] [--or-show]
+                             <name>
+openstack user create: error: unrecognized arguments: operator
+[student@workstation ~]$ openstack user create --password redhat  --email operator@example.com --project cpdemo operator
++---------------------+----------------------------------+
+| Field               | Value                            |
++---------------------+----------------------------------+
+| default_project_id  | ba5a01936ff64b60adb0170683d87a7d |
+| domain_id           | default                          |
+| email               | operator@example.com             |
+| enabled             | True                             |
+| id                  | dd9a8c78bd764d8b9e86d048a05a1f09 |
+| name                | operator                         |
+| options             | {}                               |
+| password_expires_at | None                             |
++---------------------+----------------------------------+
+[student@workstation ~]$ openstack user create --password redhat  --email architect@example.com --project cpdemo architect
++---------------------+----------------------------------+
+| Field               | Value                            |
++---------------------+----------------------------------+
+| default_project_id  | ba5a01936ff64b60adb0170683d87a7d |
+| domain_id           | default                          |
+| email               | architect@example.com            |
+| enabled             | True                             |
+| id                  | 27c47bcb0a3d4049bdb43d79822ff746 |
+| name                | architect                        |
+| options             | {}                               |
+| password_expires_at | None                             |
++---------------------+----------------------------------+
+[student@workstation ~]$ openstack user list 
++----------------------------------+------------+
+| ID                               | Name       |
++----------------------------------+------------+
+| 27c47bcb0a3d4049bdb43d79822ff746 | architect  |
+| 68242415700d42dbb52bbd4ff13f3d58 | swift      |
+| 6f0d421b5f2a4d0880b86b713a87c3ba | aodh       |
+| 7177e7df20fc41b3b0b6531e66daa907 | cinder     |
+| 794e9961bb1a492096d1e115288e02de | ceilometer |
+| 9ab28630cf93470a9a38047c6132a21c | gnocchi    |
+| 9b523cf167aa4c129163a424d127ebe3 | heat-cfn   |
+| 9ce00d8980274974b2285ed73ef80241 | admin      |
+| 9d704f55d7d3447c8e8229b706d5e5ca | manila     |
+| a48dc9ff61c54efb8104440971e1ffdd | placement  |
+| ad36a17bc5b144e0aa66ec69fa4ec790 | glance     |
+| b67fd5852ed54979abf8b08cc884d706 | neutron    |
+| d5ea361ac1d44b3fa6aa289cd0a52756 | nova       |
+| d82e9ee56dd84fef8b6957e9af7eba35 | octavia    |
+| dd9a8c78bd764d8b9e86d048a05a1f09 | operator   |
+| e0e71c96c5a342268a433c7e4ff0eebc | manilav2   |
+| f11e62fac8194214a16504258016f77b | heat       |
+| ff141d04fc214efea2bf7796c15d8fc8 | panko      |
++----------------------------------+------------+
+[student@workstation ~]$ openstack role assignment list
+
++----------------------------------+----------------------------------+------------------------------------------------------------------+----------------------------------+----------------------------------+-----------+
+| Role                             | User                             | Group                                                            | Project                          | Domain                           | Inherited |
++----------------------------------+----------------------------------+------------------------------------------------------------------+----------------------------------+----------------------------------+-----------+
+| 9fc98f8d769c4ad08a7ffeae83a19029 | 68242415700d42dbb52bbd4ff13f3d58 |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | 6f0d421b5f2a4d0880b86b713a87c3ba |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | 7177e7df20fc41b3b0b6531e66daa907 |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+| 6fd3ce42a3b645d19e406571b1c0df46 | 794e9961bb1a492096d1e115288e02de |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | 794e9961bb1a492096d1e115288e02de |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | 9ab28630cf93470a9a38047c6132a21c |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | 9b523cf167aa4c129163a424d127ebe3 |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+| 9fe2ff9ee4384b1894a90878d3e92bab | 9ce00d8980274974b2285ed73ef80241 |                                                                  | 294ad7735e6646d7bb908e32de8582c3 |                                  | False     |
+| 9fe2ff9ee4384b1894a90878d3e92bab | 9ce00d8980274974b2285ed73ef80241 |                                                                  | 3c003f65d8d64914a053f178fbbf953c |                                  | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | 9ce00d8980274974b2285ed73ef80241 |                                                                  | 42eecbfbaf684f909abfe5304434fc77 |                                  | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | 9d704f55d7d3447c8e8229b706d5e5ca |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | a48dc9ff61c54efb8104440971e1ffdd |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | ad36a17bc5b144e0aa66ec69fa4ec790 |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | b67fd5852ed54979abf8b08cc884d706 |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | d5ea361ac1d44b3fa6aa289cd0a52756 |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | d82e9ee56dd84fef8b6957e9af7eba35 |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | e0e71c96c5a342268a433c7e4ff0eebc |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | f11e62fac8194214a16504258016f77b |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | ff141d04fc214efea2bf7796c15d8fc8 |                                                                  | d8f51de41e7e4f4b8c71ed7dfc226c97 |                                  | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 |                                  | 2cfc323f68980c5bc3a5ab382d504d4b112dac2677fd1d0de1c9c4542528688e | 294ad7735e6646d7bb908e32de8582c3 |                                  | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 |                                  | 32a2b9dc43579c33a2ead778a5214f8f6a2e53332507bcc9974636d3fa9a6767 | 3c003f65d8d64914a053f178fbbf953c |                                  | False     |
+| 9fe2ff9ee4384b1894a90878d3e92bab |                                  | 9249155e7180d502b6bfab59e3c4a2917c3049c4b0098885290a817850ffd60f | 294ad7735e6646d7bb908e32de8582c3 |                                  | False     |
+| 0aa9cdf501324d88b5a58c7773dec328 |                                  | a5296a0f5fba2304e3017e7ad96d730bda72e4a518e485e4a61dafccfe7528c0 | 294ad7735e6646d7bb908e32de8582c3 |                                  | False     |
+| 9fe2ff9ee4384b1894a90878d3e92bab |                                  | db4d2aa26bf05671c73bf9d41c388987b93300edd257fac9a7f373f5b7d10997 | 3c003f65d8d64914a053f178fbbf953c |                                  | False     |
+| 0aa9cdf501324d88b5a58c7773dec328 |                                  | f8c7fce74fda37e85f58317ff3a021063d092b14f9f841578c8a7fe0cb1b2e54 | 3c003f65d8d64914a053f178fbbf953c |                                  | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | 383d0a108c424c4385f8467cf8d04a9d |                                                                  |                                  | 0f60d2e3835f48d2bdd3cc524855c4cd | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | 9ce00d8980274974b2285ed73ef80241 |                                                                  |                                  | 8dd2d316acc74f54b890bae519ea75b9 | False     |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | 9ce00d8980274974b2285ed73ef80241 |                                                                  |                                  |                                  | False     |
++----------------------------------+----------------------------------+------------------------------------------------------------------+----------------------------------+----------------------------------+-----------+
+[student@workstation ~]$ 
+[student@workstation ~]$ openstack role  list
++----------------------------------+-----------------+
+| ID                               | Name            |
++----------------------------------+-----------------+
+| 0aa9cdf501324d88b5a58c7773dec328 | swiftoperator   |
+| 68625e59d10e42c5a91c7e84eea8490a | heat_stack_user |
+| 6fd3ce42a3b645d19e406571b1c0df46 | ResellerAdmin   |
+| 9fc98f8d769c4ad08a7ffeae83a19029 | admin           |
+| 9fe2ff9ee4384b1894a90878d3e92bab | _member_        |
++----------------------------------+-----------------+
+[student@workstation ~]$ openstack role assignment list --project 
+usage: openstack role assignment list [-h] [-f {csv,json,table,value,yaml}]
+                                      [-c COLUMN] [--max-width <integer>]
+                                      [--fit-width] [--print-empty]
+                                      [--noindent]
+                                      [--quote {all,minimal,none,nonnumeric}]
+                                      [--sort-column SORT_COLUMN]
+                                      [--effective] [--role <role>]
+                                      [--role-domain <role-domain>] [--names]
+                                      [--user <user>]
+                                      [--user-domain <user-domain>]
+                                      [--group <group>]
+                                      [--group-domain <group-domain>]
+                                      [--domain <domain> | --project <project>]
+                                      [--project-domain <project-domain>]
+                                      [--inherited] [--auth-user]
+                                      [--auth-project]
+openstack role assignment list: error: argument --project: expected one argument
+[student@workstation ~]$ openstack role assignment list --project cpdemo
+
+[student@workstation ~]$ openstack role add user operator  --project cpdemo _member_ 
+usage: openstack role add [-h] [--domain <domain> | --project <project>]
+                          [--user <user> | --group <group>]
+                          [--group-domain <group-domain>]
+                          [--project-domain <project-domain>]
+                          [--user-domain <user-domain>] [--inherited]
+                          [--role-domain <role-domain>]
+                          <role>
+openstack role add: error: unrecognized arguments: operator _member_
+[student@workstation ~]$ openstack role add --user operator  --project cpdemo _member_ 
+[student@workstation ~]$ openstack role assignment list --project cpdemo+----------------------------------+----------------------------------+-------+----------------------------------+--------+-----------+
+| Role                             | User                             | Group | Project                          | Domain | Inherited |
++----------------------------------+----------------------------------+-------+----------------------------------+--------+-----------+
+| 9fe2ff9ee4384b1894a90878d3e92bab | dd9a8c78bd764d8b9e86d048a05a1f09 |       | ba5a01936ff64b60adb0170683d87a7d |        | False     |
++----------------------------------+----------------------------------+-------+----------------------------------+--------+-----------+
+[student@workstation ~]$ openstack role assignment list --project cpdemo --user operator
++----------------------------------+----------------------------------+-------+----------------------------------+--------+-----------+
+| Role                             | User                             | Group | Project                          | Domain | Inherited |
++----------------------------------+----------------------------------+-------+----------------------------------+--------+-----------+
+| 9fe2ff9ee4384b1894a90878d3e92bab | dd9a8c78bd764d8b9e86d048a05a1f09 |       | ba5a01936ff64b60adb0170683d87a7d |        | False     |
++----------------------------------+----------------------------------+-------+----------------------------------+--------+-----------+
+[student@workstation ~]$ openstack role assignment list --project cpdemo --user operator --names
++----------+------------------+-------+----------------+--------+-----------+
+| Role     | User             | Group | Project        | Domain | Inherited |
++----------+------------------+-------+----------------+--------+-----------+
+| _member_ | operator@Default |       | cpdemo@Default |        | False     |
++----------+------------------+-------+----------------+--------+-----------+
+[student@workstation ~]$ openstack role add --user architect  --project cpdemo admin_ 
+No role with a name or ID of 'admin_' exists.
+[student@workstation ~]$ openstack role add --user architect  --project cpdemo admin
+[student@workstation ~]$ openstack role assignment list --project cpdemo --user operator --names
++----------+------------------+-------+----------------+--------+-----------+
+| Role     | User             | Group | Project        | Domain | Inherited |
++----------+------------------+-------+----------------+--------+-----------+
+| _member_ | operator@Default |       | cpdemo@Default |        | False     |
++----------+------------------+-------+----------------+--------+-----------+
+[student@workstation ~]$ openstack role assignment list --project cpdemo --names
++----------+-------------------+-------+----------------+--------+-----------+
+| Role     | User              | Group | Project        | Domain | Inherited |
++----------+-------------------+-------+----------------+--------+-----------+
+| admin    | architect@Default |       | cpdemo@Default |        | False     |
+| _member_ | operator@Default  |       | cpdemo@Default |        | False     |
++----------+-------------------+-------+----------------+--------+-----------+
+[student@workstation ~]$ 
+

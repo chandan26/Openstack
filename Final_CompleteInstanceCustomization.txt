@@ -1,0 +1,73 @@
+    1  ls
+    2  source developer1-finance-rc 
+    3  cat developer1-finance-rc 
+    4  logout
+    5  openstack 
+    6  openstack exit
+    7  exit
+    8  source admin-rc 
+    9  openstack user list
+   10  openstack project list
+   11  openstack project show finance
+   12  openstack user create --email operator@gmail.com --password redhat --project finance operator1
+   13  openstack user create --email architect1@gmail.com --password redhat --project finance architect1
+   14  openstack role add --user operator1 --project finance _member_
+   15  openstack role add --user architect1 --project finance admin
+   16  openstack role assignment list --project finance --names
+   17  source admin-rc 
+   18  openstack role assignment list --project finance 
+   19  openstack role assignment list --project finance  --names
+   20  openstack role assignment list --project --user operator1
+   21  openstack role assignment list --project finance --user operator1
+   22  openstack role assignment list --project finance --user operator1 --names
+   23  openstack role assignment list --project finance --user architect1
+   24  openstack role assignment list --project finance --user architect1 --names
+   25  cp developer1-finance-rc operator1-finance-rc
+   26  cp developer1-finance-rc architect1-finance-rc
+   27  vim operator1-finance-rc 
+   28  vim architect1-finance-rc 
+   29  cat operator1-finance-rc 
+   30  cat architect1-finance-rc 
+   31  cat operator1-finance-rc 
+   32  source operator1-finance-rc 
+   33  openstack image list
+   34  openstack project show finance
+   35  openstack keypair create key1> key1.pem
+   36  openstack keypair list
+   37  openstack security group create --description "web instance_customization_ICMP" web-sg 
+   38  openstack security group list
+   39  openstack security group list --names
+   40  openstack security group rule  create  --remote--ip 0.0.0.0/0 --dst-port 22 --protocol tcp web-sg
+   41  openstack security group rule  create --remote--ip 0.0.0.0/0 --dst-port 22 --protocol tcp web-sg
+   42  openstack security group list
+   43  openstack security group rule  create --remote--ip 0.0.0.0/0 --dst-port 22 --protocol tcp web-sg
+   44  openstack security group create --description "web instance_customization_ICMP" web-sg
+   45  openstack security group list
+   46  openstack security group rule  create --remote--ip 0.0.0.0/0 --dst-port 22 --protocol tcp web-sg
+   47  openstack security group rule  create --remote-ip 0.0.0.0/0 --dst-port 22 --protocol tcp web-sg
+   48  openstack security group rule  create --remote-ip 0.0.0.0/0 --dst-port 22 --protocol tcp web-sg 
+   49  openstack security group list
+   50  openstack security group rule list
+   51  openstack security group rule list | grep web-sg
+   52  openstack security group rule  create --remote-ip 0.0.0.0/0 --dst-port 22 --protocol tcp web-secgrp
+   53  openstack security group create --description "web instance_customization_ICMP" web-sgrp
+   54  openstack security group rule  create --remote-ip 0.0.0.0/0 --dst-port 22 --protocol tcp web-sgrp
+   55  openstack security group rule  create --remote-ip 0.0.0.0/0 --dst-port 80 --protocol tcp web-sgrp
+   56  openstack security group rule  create --remote-ip 0.0.0.0/0 --dst-port -1 --protocol tcp web-sgrp
+   57  openstack security group rule  create --remote-ip 0.0.0.0/0 --dst-port -1 --protocol icmp web-sgrp
+   58  vim install_custom_http
+   59  openstack router create router 1
+   60  openstack router create router1
+   61  openstack router add subnet router1 finance-subnet1
+   62  openstack external-gate
+   63  openstack router 
+   64  openstack router  set
+   65  openstack network list
+   66  openstack router set --external-gateway provider-datacentre router1
+   67  openstack server create --image rhel7 --flavor default --key-name key1 --security-group web-sgrp --user-data /home/student/install_custom_http finserver1
+   68  openstack server create --image rhel7 --flavor default --key-name key1 --security-group web-sgrp --nic net-id=finance-network1  --user-data /home/student/install_custom_http finserver1
+   69  openstack server list 
+   70  openstack console vnc url show finserver1 
+   71  openstack console url show finserver1 
+   72  history >> Final&CompleteInstanceCustomization.txt
+   73  history >> Final_CompleteInstanceCustomization.txt

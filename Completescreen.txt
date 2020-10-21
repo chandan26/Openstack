@@ -1,0 +1,160 @@
+[student@workstation Commands]$ yum install git
+Loaded plugins: langpacks, search-disabled-repos
+You need to be root to perform this command.
+[student@workstation Commands]$ sudo bash
+[sudo] password for student: 
+[root@workstation Commands]# yum install git
+Loaded plugins: langpacks, search-disabled-repos
+Resolving Dependencies
+--> Running transaction check
+---> Package git.x86_64 0:1.8.3.1-14.el7_5 will be installed
+--> Processing Dependency: perl-Git = 1.8.3.1-14.el7_5 for package: git-1.8.3.1-14.el7_5.x86_64
+--> Processing Dependency: perl(Term::ReadKey) for package: git-1.8.3.1-14.el7_5.x86_64
+--> Processing Dependency: perl(Git) for package: git-1.8.3.1-14.el7_5.x86_64
+--> Processing Dependency: perl(Error) for package: git-1.8.3.1-14.el7_5.x86_64
+--> Running transaction check
+---> Package perl-Error.noarch 1:0.17020-2.el7 will be installed
+---> Package perl-Git.noarch 0:1.8.3.1-14.el7_5 will be installed
+---> Package perl-TermReadKey.x86_64 0:2.30-20.el7 will be installed
+--> Finished Dependency Resolution
+
+Dependencies Resolved
+
+==========================================================================================================
+ Package                    Arch             Version                     Repository                  Size
+==========================================================================================================
+Installing:
+ git                        x86_64           1.8.3.1-14.el7_5            rhel7.5-updates            4.4 M
+Installing for dependencies:
+ perl-Error                 noarch           1:0.17020-2.el7             rhel--server-dvd            32 k
+ perl-Git                   noarch           1.8.3.1-14.el7_5            rhel7.5-updates             54 k
+ perl-TermReadKey           x86_64           2.30-20.el7                 rhel--server-dvd            31 k
+
+Transaction Summary
+==========================================================================================================
+Install  1 Package (+3 Dependent packages)
+
+Total download size: 4.5 M
+Installed size: 22 M
+Is this ok [y/d/N]: y
+Downloading packages:
+(1/4): perl-Error-0.17020-2.el7.noarch.rpm                                         |  32 kB  00:00:00     
+(2/4): perl-Git-1.8.3.1-14.el7_5.noarch.rpm                                        |  54 kB  00:00:00     
+(3/4): git-1.8.3.1-14.el7_5.x86_64.rpm                                             | 4.4 MB  00:00:00     
+(4/4): perl-TermReadKey-2.30-20.el7.x86_64.rpm                                     |  31 kB  00:00:00     
+----------------------------------------------------------------------------------------------------------
+Total                                                                      22 MB/s | 4.5 MB  00:00:00     
+Running transaction check
+Running transaction test
+Transaction test succeeded
+Running transaction
+  Installing : 1:perl-Error-0.17020-2.el7.noarch                                                      1/4 
+  Installing : perl-TermReadKey-2.30-20.el7.x86_64                                                    2/4 
+  Installing : git-1.8.3.1-14.el7_5.x86_64                                                            3/4 
+  Installing : perl-Git-1.8.3.1-14.el7_5.noarch                                                       4/4 
+  Verifying  : 1:perl-Error-0.17020-2.el7.noarch                                                      1/4 
+  Verifying  : git-1.8.3.1-14.el7_5.x86_64                                                            2/4 
+  Verifying  : perl-Git-1.8.3.1-14.el7_5.noarch                                                       3/4 
+  Verifying  : perl-TermReadKey-2.30-20.el7.x86_64                                                    4/4 
+
+Installed:
+  git.x86_64 0:1.8.3.1-14.el7_5                                                                           
+
+Dependency Installed:
+  perl-Error.noarch 1:0.17020-2.el7                     perl-Git.noarch 0:1.8.3.1-14.el7_5                
+  perl-TermReadKey.x86_64 0:2.30-20.el7                
+
+Complete!
+[root@workstation Commands]# ls
+Final_CompleteInstanceCustomization.txt
+[root@workstation Commands]# git add Final_CompleteInstanceCustomization.txt 
+fatal: Not a git repository (or any of the parent directories): .git
+[root@workstation Commands]# git init
+Initialized empty Git repository in /home/student/Desktop/Commands/.git/
+[root@workstation Commands]# git add Final_CompleteInstanceCustomization.txt 
+[root@workstation Commands]# git commit -m "Final Inastance_Customization"
+[master (root-commit) 66ad9fe] Final Inastance_Customization
+ Committer: root <root@workstation.lab.example.com>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 1 file changed, 73 insertions(+)
+ create mode 100644 Final_CompleteInstanceCustomization.txt
+[root@workstation Commands]# git remote add origin https://github.com/chandan26/Openstack
+[root@workstation Commands]# git branch
+* master
+[root@workstation Commands]# git checkout Image_customization
+error: pathspec 'Image_customization' did not match any file(s) known to git.
+[root@workstation Commands]# git checkout -b Image_customization
+Switched to a new branch 'Image_customization'
+[root@workstation Commands]# git push origin Image_customization
+Username for 'https://github.com': chandan26
+Password for 'https://chandan26@github.com': 
+Counting objects: 3, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 1.12 KiB | 0 bytes/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+remote: 
+remote: Create a pull request for 'Image_customization' on GitHub by visiting:
+remote:      https://github.com/chandan26/Openstack/pull/new/Image_customization
+remote: 
+To https://github.com/chandan26/Openstack
+ * [new branch]      Image_customization -> Image_customization
+[root@workstation Commands]# history | tail -n 10
+    3  git add Final_CompleteInstanceCustomization.txt 
+    4  git init
+    5  git add Final_CompleteInstanceCustomization.txt 
+    6  git commit -m "Final Inastance_Customization"
+    7  git remote add origin https://github.com/chandan26/Openstack
+    8  git branch
+    9  git checkout Image_customization
+   10  git checkout -b Image_customization
+   11  git push origin Image_customization
+   12  history | tail -n 10
+[root@workstation Commands]# history | tail -n 10 >>gitcommands.txt
+[root@workstation Commands]# git add gitcommands.txt 
+[root@workstation Commands]# git commit -m "git cheatsheet"
+[Image_customization 2b5c4b9] git cheatsheet
+ Committer: root <root@workstation.lab.example.com>
+Your name and email address were configured automatically based
+on your username and hostname. Please check that they are accurate.
+You can suppress this message by setting them explicitly:
+
+    git config --global user.name "Your Name"
+    git config --global user.email you@example.com
+
+After doing this, you may fix the identity used for this commit with:
+
+    git commit --amend --reset-author
+
+ 1 file changed, 10 insertions(+)
+ create mode 100644 gitcommands.txt
+[root@workstation Commands]# git checkout -b gitcommands
+Switched to a new branch 'gitcommands'
+[root@workstation Commands]# git push origin gitcommands
+Username for 'https://github.com': chandan26
+Password for 'https://chandan26@github.com': 
+Counting objects: 4, done.
+Delta compression using up to 2 threads.
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 532 bytes | 0 bytes/s, done.
+Total 3 (delta 0), reused 0 (delta 0)
+remote: 
+remote: Create a pull request for 'gitcommands' on GitHub by visiting:
+remote:      https://github.com/chandan26/Openstack/pull/new/gitcommands
+remote: 
+To https://github.com/chandan26/Openstack
+ * [new branch]      gitcommands -> gitcommands
+[root@workstation Commands]# git checkout Image_customization
+Switched to branch 'Image_customization'
+[root@workstation Commands]# 
+

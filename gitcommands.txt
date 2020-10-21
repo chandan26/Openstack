@@ -1,0 +1,10 @@
+    4  git init
+    5  git add Final_CompleteInstanceCustomization.txt 
+    6  git commit -m "Final Inastance_Customization"
+    7  git remote add origin https://github.com/chandan26/Openstack
+    8  git branch
+    9  git checkout Image_customization
+   10  git checkout -b Image_customization
+   11  git push origin Image_customization
+   12  history | tail -n 10
+   13  history | tail -n 10 >>gitcommands.txt
